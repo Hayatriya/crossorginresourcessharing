@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch User Details</title>
+    <script>
+        async function fetchUserDetails() {
+            const username = document.getElementById('username').value;
+            const url = 'http://localhost:3000/users';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                });
+                const data = await response.json();
+                displayUserDetails(data);
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        }
+
+        function displayUserDetails(data) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            if (Array.isArray(data)) {
+                data.forEach(user => {
+                    resultDiv.innerHTML += `<p>${JSON.stringify(user)}</p>`;
+                });
+            } else {
+                resultDiv.innerHTML = `<p>${JSON.stringify(data)}</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Fetch User Details</h1>
+    <label for="username">Enter Username:</label>
+    <input type="text" id="username" name="username">
+    <button onclick="fetchUserDetails()">Fetch Details</button>
+    <div id="result"></div>
+</body>
+</html>
+
